@@ -5,7 +5,9 @@
       v-slot="{ navigate }"
     >
         <button class="personcard" @click="navigate" role="link">
-            {{ personData.name }} - {{ personData.possition }} - {{ personData.department }}
+            <p class="personcard-name">{{ personData.name }}</p>
+            <p class="personcard-phone"><span>&#128222;</span> {{ personData.phone }}</p>
+            <p class="personcard-info">{{ personData.department }} - {{ personData.possition }} - {{ personData.birthday }}</p>
         </button>
     </router-link>
   </template>
@@ -15,27 +17,32 @@
     name: 'PersonCard',
     props: {
         personData: Object
-    },
-    methods: {
-        goToEdit() {
-
-        }
-    },
-    data() {
-        return {
-            //peopleData: Array
-        }
-    },
-    mounted() {
-        // const people = localStorage.getItem("people")
-        // this.peopleData = JSON.parse(people)
-        //console.log(people)
     }
   }
   </script>
   
-  <!-- Add "scoped" attribute to limit CSS to this component only -->
   <style scoped>
+  .personcard {
+    background-color: white;
+    margin-top: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+  }
+  .personcard-name {
+    font-size: 18px;
+    font-weight: 700;
+    
+  }
+  .personcard-phone {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .personcard-info {
+    font-size: 16px;
+  }
+  p {
+    text-transform: capitalize;
+  }
 
   </style>
   

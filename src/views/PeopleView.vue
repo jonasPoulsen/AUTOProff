@@ -6,9 +6,6 @@
             <div class="card-wrapper">
                 <PersonCard v-for="(item, index) in searchPerson" :key="index" :personData="item" />
             </div>
-            <!-- <button v-for="(item, index) in searchPerson" :key="index" @click="doThing">{{ item }}</button> -->
-                
-
         </div>
         <div class="flex-item">
              <PeopleList :peopleData="peopleData" /> 
@@ -17,7 +14,6 @@
   </template>
   
   <script>
-  // @ is an alias to /src
   import PeopleList from '@/components/PeopleList.vue'
   import PersonCard from '@/components/PersonCard.vue'
   
@@ -34,12 +30,6 @@
             searchVal: "",
             searchArray: []
         }
-    },
-    methods: {
-        doThing() {
-            console.log('jonas');
-        }
-        
     },
     computed: {
         searchPerson() {
@@ -69,17 +59,12 @@
 
 <style scoped>
 .container {
-    /* background-color:#2E4272; */
     display:flex;
-    /* flex-wrap: row; */
 }
 .fixed {
-    /* background-color:#4F628E; */
     width: 400px;
-    /* flex-grow: 2; */
 }
 .flex-item {
-    /* background-color:#7887AB; */
     flex-grow: 2;
     padding-left: 75px;
     

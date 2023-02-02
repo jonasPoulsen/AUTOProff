@@ -1,20 +1,19 @@
 <template>
     <div class="create">
-      <h1>Crteate page</h1>
-      <CreateForm />
+        <h1>Crteate page</h1>
+        <CreateForm />
     </div>
-  </template>
+</template>
   
-  <script>
-  // @ is an alias to /src
-  import CreateForm from '@/components/CreateForm.vue'
-  
-  
-  export default {
+<script>
+import CreateForm from '@/components/CreateForm.vue'
+
+
+export default {
     name: 'CreateView',
     components: {
         CreateForm,
     }
-  }
-  </script>
+}
+</script>
   

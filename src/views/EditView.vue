@@ -1,30 +1,34 @@
 <template>
     <div class="">
-        the id is {{  personId }} - index {{ theIndex }}
         <form class="d-flex flex-column">
-            <div>
-                <label>Skriv navn</label><input v-model="formName" placeholder="Navn" ref="formName" />
+            <div class="editform-input-holder">
+                <h4>{{ formDepartment }}</h4>
             </div>
-            <div>
-                <label>Skriv navn</label><select v-model="formDepartment" ref="formDepartment">
-                    <option disabled value="">Vælg afdeling</option>
-                    <option>Afd. Syd</option>
-                    <option>Afd. Nord</option>
-                    <option>Afd. Vest</option>
-                </select>
+            <div class="editform-input-holder">
+                <p class="editform-label">Skriv navn</p>
+                <p v-if="this.formName === ''" class="editform-required">*Ufyld dette felt</p>
+                <input v-model="formName" placeholder="Navn" ref="formName" />
             </div>
 
-            <div>
-                <label>Stilling</label><input v-model="formPossition" placeholder="Stilling" ref="formPossition" />
+            <div class="editform-input-holder">
+                <p class="editform-label">Stilling</p>
+                <p v-if="this.formPossition === ''" class="editform-required">*Ufyld dette felt</p>
+                <input v-model="formPossition" placeholder="Stilling" ref="formPossition" />
+            </div>
+            <div class="editform-input-holder">
+                <p class="editform-label">Fødelsdag</p>
+                <p v-if="this.formBirthday === ''" class="editform-required">*Ufyld dette felt</p>
+                <input v-model="formBirthday" placeholder="Fødselsdag DD-MM-ÅÅÅÅ" ref="formBirthday" />
+            </div>
+            <div class="editform-input-holder">
+                <p class="editform-label">Telefon</p>
+                <p v-if="this.formPhone === ''" class="editform-required">*Ufyld dette felt</p>
+                <input v-model="formPhone" placeholder="Telefon" ref="formPhone" />
             </div>
             <div>
-                <label>Fødelsdag</label><input v-model="formBirthday" placeholder="Fødselsdag DD-MM-ÅÅÅÅ" ref="formBirthday" />
+                <button class="save-button" @click="editThisPerson">Gem</button>
+                <button class="delete-button" @click="deleteThisPerson">Slet person</button>
             </div>
-            <div>
-                <label>Fødelsdag</label><input v-model="formPhone" placeholder="Telefon" ref="formPhone" />
-            </div>
-            
-            <button @click="editThisPerson">Gem ændringer</button>
         </form>
     </div>
   </template>
@@ -51,18 +55,21 @@
         }
     },
     methods: {
+        validateInput() {
+            if (this.formName === "" || this.formDepartment === "" || this.formPossition === "" || this.formBirthday === "" || this.formPhone === ""){
+                return false;
+            }
+            return true;
+        },
         getThisPerson() {
-            //let thisPerson = localStorage.getItem("people")
 
             let allPeops = JSON.parse(localStorage.getItem("people"))
             this.allPersons = allPeops
             let thisPerson = allPeops
-            //thisPerson = JSON.parse(thisPerson);
 
             thisPerson.filter((item, index) => {
                 if (item.id == this.personId) {
                     this.theIndex = index
-                    //this.thisPerson = item 
                     this.formName = item.name
                     this.formDepartment = item.department
                     this.formPossition = item.possition
@@ -71,23 +78,36 @@
                 }
                 return true
             })
-            // console.log(allPeops[this.theIndex])
         },
         editThisPerson(e) {
             e.preventDefault()
-            //console.log(this.allPersons[this.theIndex])
 
-            let newArray = this.allPersons
-            newArray[this.theIndex].name = this.formName
-            newArray[this.theIndex].department = this.formDepartment
-            newArray[this.theIndex].possition = this.formPossition
-            newArray[this.theIndex].birthday = this.formBirthday
-            newArray[this.theIndex].phone = this.formPhone
-            
-            localStorage.removeItem("people");
-            localStorage.setItem("people", JSON.stringify(newArray));
+            if (this.validateInput()) {
+                
+                let newArray = this.allPersons
+                newArray[this.theIndex].name = this.formName.toLowerCase()
+                newArray[this.theIndex].department = this.formDepartment.toLowerCase()
+                newArray[this.theIndex].possition = this.formPossition.toLowerCase()
+                newArray[this.theIndex].birthday = this.formBirthday.toLowerCase()
+                newArray[this.theIndex].phone = this.formPhone.toLowerCase()
+                
+                localStorage.setItem("people", JSON.stringify(newArray));
+                this.$router.push({ name: 'people' })
+            }
         },
-        deleteThisPerson() {
+        deleteThisPerson(e) {
+            e.preventDefault()
+
+            if (confirm("Du sletter en bruger permanent - Denne handling kan ikke fortrydes bag efter!")) {
+                let newArray = this.allPersons
+                newArray.splice(this.theIndex, 1)
+                localStorage.setItem("people", JSON.stringify(newArray));
+
+                this.$router.push({ name: 'people' })
+
+            }
+
+            
 
         }
         
@@ -95,11 +115,41 @@
     mounted() {
         this.personId = useRoute().params.id
         this.getThisPerson()
+        this.$refs.formName.focus()
     }
   }
   </script>
 
 <style scoped>
-
+.editform-required {
+    font-size: 10px;
+    color: red;
+    margin-block-end: 0;
+    margin-block-start: 0;
+    
+}
+.editform-input-holder {
+    margin-bottom: 25px;
+}
+.editform-label {
+    margin-block-end: 0;
+}
+.save-button {
+    width: 120px;
+    height: 35px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 8px;
+}
+.delete-button {
+    width: 120px;
+    height: 35px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 8px;
+    background-color: red;
+    color: white;
+    border-color: red;
+}
 </style>
   
