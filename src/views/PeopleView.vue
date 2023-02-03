@@ -1,6 +1,7 @@
 <template>
     <div class="container">
         <div class="fixed">
+            <p>Genvej til ny profil: ("cmd/ctrl" + "shift") + "s"</p>
             <h3>Søg efter personele her</h3>
             <input type="text" placeholder="Skriv navn" v-model="searchVal" ref="searchVal" />
             <div class="card-wrapper">
@@ -31,6 +32,11 @@
             searchArray: []
         }
     },
+    methods: {
+        doStuff() {
+            this.$router.push({ name: 'ny-person' })
+        }
+    },
     computed: {
         searchPerson() {
             if (this.searchVal.length > 2) {
@@ -53,6 +59,15 @@
         this.peopleData = JSON.parse(people)
 
         this.$refs.searchVal.focus()
+
+        this._keyListener = function(e) {
+            if (e.key === "s" && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault(); // present "Save Page" from getting triggered.
+
+                this.doStuff();
+            }
+        };
+        document.addEventListener('keydown', this._keyListener.bind(this));
     }
   }
   </script>
